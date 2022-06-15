@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <title>Speech to text</title>
+</head>
+<body>
+<py-script>
+    recognizer = sr.Recognizer()
+    while True:
+        try:
+            with sr.Microphone() as mic:
+                recognizer.adjust_for_ambient_noise(mic, duration=0.2)
+                audio = recognizer.listen(mic)
+                text = recognizer.recognize_google(audio)
+                text = text.lower()
+                print(f"You said: {text}")
+                if "bye" in text.lower() or "have a good day" in text.lower():
+                    engine = pyttsx3.init()
+                    # rate
+                    engine.setProperty('rate', 150)
+                    # voice
+                    voices = engine.getProperty('voices')
+                    engine.say("Bye")
+                    engine.runAndWait()
+                    engine.setProperty('voice', voices[1].id)
+        except:
+            engine = pyttsx3.init()
+            # rate
+            engine.setProperty('rate', 150)
+            # voice
+            voices = engine.getProperty('voices')
+            engine.setProperty('voice', voices[1].id)
+            engine.say("Sorry, I couldn't catch that Please tell me again.")
+            engine.runAndWait()
+            continue
+</py-script>
+</body>
+</html>
